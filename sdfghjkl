@@ -1,0 +1,69 @@
+#include <iostream>
+#include <iomanip> 
+
+using namespace std;
+/////////////////Функция вывода//////////////////////
+void matrix_output(double** arr, int n, int m) {
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      if (arr[i][j] >= 0)
+        cout << " ";
+      cout << setprecision(4) << arr[i][j] << " ";
+    }
+    cout << endl;
+  }
+}
+////////////////////////////////////////////////////
+int main()
+{
+  setlocale(LC_ALL, "rus");
+  cout << "Введите размер матрицы:\nСтрок: ";
+  int n;
+  cin >> n;
+  double **arr = new double* [n];//Создаём массив указателей
+  cout << "Столбцов: ";
+  int m;
+  cin >> m;
+  ///Заполнение массива указателей динамическими массивами///
+  for (int i = 0; i < n; i++) {
+    arr[i] = new double[m];
+  }
+  //Заполнение двумерного массива//
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      cout << "arr[" << i + 1 << "][" << j + 1 << "] = ";
+      cin >> arr[i][j];
+    }
+  }
+
+  matrix_output(arr, n, m);//вызов функции вывода матрицы
+
+  double max = arr[0][0];//переменные, в которые будем запоминать максимальный элемент
+  int max_i, max_j;//переменные, в которые будем запоминать индексы максимального элемента
+  ///Поиск максимального элемента///
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      if (arr[i][j] > max) {
+        max = arr[i][j];
+        max_i = i;
+        max_j = j;
+      }
+    }
+  }
+  /////Меняем столбцы местами////
+  for (int i = 0; i < n; i++) {
+    int tmp = arr[i][0];
+    arr[i][0] = arr[i][max_j];
+    arr[i][max_j] = tmp;
+  }
+  /////Меняем строки местами////
+  for (int j = 0; j < m; j++) {
+    int tmp = arr[0][j];
+    arr[0][j] = arr[max_i][j];
+    arr[max_i][j] = tmp;
+  }
+  cout << "------------\n";
+  matrix_output(arr, n, m);//вызов функции вывода матрицы
+  //Удаление динамического массива//
+  for (int i = 0; i < n; i++)
+    delete[] arr[i];
